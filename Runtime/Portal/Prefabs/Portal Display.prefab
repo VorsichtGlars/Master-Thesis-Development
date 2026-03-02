@@ -417,6 +417,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 3611882011624974621}
+  excludedColliders:
+  - {fileID: 8438494408546268265}
   other: {fileID: 0}
   isColliding: 0
   OnEnter:
@@ -881,85 +883,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98f6d65802a060740ba5c993f1fec743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStatusMessage: 
   viewTransform: {fileID: 0}
-  grabInteractable: {fileID: 6143290610123614706}
   interaction_coordinates_prefab: {fileID: 2711543240970582377, guid: ec2cb20081a296c418f614b184362373, type: 3}
-  clutchInput:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Clutch Input
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 978a58f6-3736-4771-b87b-a2bd8b9ddcc5
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 2136453032090497834, guid: a7d31413095584b439b226fd8da36c86, type: 3}
-  leftClutchInput:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Left Clutch Input
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 69b229c5-8efe-4fa8-9704-9b7c364afcdd
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 2823523649283104302, guid: a7d31413095584b439b226fd8da36c86, type: 3}
-  rightClutchInput:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Right Clutch Input
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: cc7226b4-1575-4dff-8880-f26016551f76
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 4112783688558290839, guid: a7d31413095584b439b226fd8da36c86, type: 3}
-  worldGrabIsActive: 0
-  input: {fileID: 0}
-  input_initial: {fileID: 0}
-  input_current: {fileID: 0}
-  display_initial: {fileID: 0}
-  display_current: {fileID: 0}
-  view_initial: {fileID: 0}
-  view_current: {fileID: 0}
-  input_initial_in_view_current: {fileID: 0}
-  input_current_in_view_current: {fileID: 0}
-  inital_display_to_controller_offset:
-    e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  steeringInput:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Steering Input
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 3392910f-d311-4f0a-b436-f53ccd2c1260
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -7048873820479669061, guid: a7d31413095584b439b226fd8da36c86, type: 3}
   leftTriggerInput:
     m_UseReference: 1
     m_Action:
@@ -971,7 +896,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: -8695856961348181045, guid: a7d31413095584b439b226fd8da36c86, type: 3}
+    m_Reference: {fileID: 7371829180760433478, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
   rightTriggerInput:
     m_UseReference: 1
     m_Action:
@@ -983,11 +908,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: -5607058501110032550, guid: a7d31413095584b439b226fd8da36c86, type: 3}
-  speedTransferFunction:
-    minimum: 0.1
-    maximum: 20
-    shape: 4
+    m_Reference: {fileID: 880741965549104688, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
   scaleInput:
     m_UseReference: 1
     m_Action:
@@ -1012,17 +933,16 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: -6171108751888949699, guid: a7d31413095584b439b226fd8da36c86, type: 3}
+  portalGrabIsActive: 0
+  worldGrabIsActive: 0
+  speedTransferFunction:
+    minimum: 0.1
+    maximum: 20
+    shape: 4
   scaleTransferFunction:
     minimum: 0.5
     maximum: 60
     shape: 3
-  status: 
-  scaleResetTime: 1.5
-  guiElement: {fileID: 4416904002896190555}
-  sliderElement: {fileID: 7261493934010409708}
-  displayedText: 1:1
-  joystick: {fileID: 8538609803921104863}
-  joystickRoot: {fileID: 1803344475487678023}
 --- !u!114 &5308852153995822969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1986,7 +1906,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8171102934518621575, guid: e1db8bab596ce2249bd600a2c7111946, type: 3}
       propertyPath: m_Name
-      value: Six DOF Joystick Portal Grab
+      value: Joystick
       objectReference: {fileID: 0}
     - target: {fileID: 8171102934518621575, guid: e1db8bab596ce2249bd600a2c7111946, type: 3}
       propertyPath: m_Layer
@@ -3173,17 +3093,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4dfa8db059c86a34d81a4c1e6185d5c0, type: 3}
---- !u!114 &7261493934010409708 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 931816916640208042, guid: 4dfa8db059c86a34d81a4c1e6185d5c0, type: 3}
-  m_PrefabInstance: {fileID: 7505381609253779014}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &7261493934010409709 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 931816916640208043, guid: 4dfa8db059c86a34d81a4c1e6185d5c0, type: 3}

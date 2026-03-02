@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,6 +10,7 @@ namespace VRSYS.Photoportals.Extensions
 public class ColliderEvents : MonoBehaviour {
 
     public Collider collider;
+    public List<Collider> excludedColliders;
     public Collider other;
     public bool isColliding;
     public UnityEvent<Collider> OnEnter;
@@ -16,18 +18,21 @@ public class ColliderEvents : MonoBehaviour {
     public UnityEvent<Collider> OnStay;
 
     void OnTriggerEnter(Collider other) {
+        if (this.excludedColliders.Contains(other)) return;
         this.isColliding = true;
         this.other = other;
         this.OnEnter.Invoke(other);
     }
 
     void OnTriggerExit(Collider other) {
+        if(this.excludedColliders.Contains(other)) return;
         this.isColliding = false;
         this.other = null;
         this.OnExit.Invoke(other);
     }
 
     void OnTriggerStay(Collider other) {
+        if (this.excludedColliders.Contains(other)) return;
         this.OnStay.Invoke(other);
     }
 
