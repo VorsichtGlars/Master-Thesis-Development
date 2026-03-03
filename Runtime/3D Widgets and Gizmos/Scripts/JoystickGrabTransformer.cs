@@ -9,49 +9,26 @@ using VRSYS.Photoportals;
 using VRSYS.Photoportals.Extensions;
 
 public class JoystickGrabTranformer : XRBaseGrabTransformer {
-    [SerializeField]
-    private string status;
-    [SerializeField]
     private Transform root;
-    private float sphereRadius = 0.08f/2f;
-    private XRGrabInteractable handle;
-
-    //hacky area
-
-    public PortalControl portalControl;
-    public float steeringSpeed = 1.0f;
-
-    //
+    private float sphereRadius;
 
     public override void OnLink(XRGrabInteractable grabInteractable) {
         base.OnLink(grabInteractable);
-        this.handle = grabInteractable;
-        this.handle.selectExited.AddListener(ResetHandle);
-    }
-    public override void OnUnlink(XRGrabInteractable grabInteractable) {
-        base.OnUnlink(grabInteractable);
+        grabInteractable.selectExited.AddListener(() => {
+            grabInteractable.transform.DOFollowTransform(this.root,0.5f).
+            SetEase(Ease.OutBack);
+        });
+        this.root = this.transform.parent.Find("Root");
+        this.sphereRadius = this.transform.parent.Find("Interaction Volume").localScale.x / 2f;
     }
 
     public override void Process(XRGrabInteractable grabInteractable, XRInteractionUpdateOrder.UpdatePhase updatePhase, ref Pose targetPose, ref Vector3 localScale) {
         var interactor = grabInteractable.firstInteractorSelecting;
         var difference = interactor.transform.position - root.position;
 
-        var steeringVector = difference;
-
-        var localRepr = this.portalControl.gameObject.transform.GetMatrix4x4().inverse * steeringVector;
-        var viewRepr = this.portalControl.viewTransform.GetMatrix4x4() * localRepr;
-        viewRepr *= this.steeringSpeed * Time.deltaTime;
-        this.portalControl.ApplySteeringVector(viewRepr, Space.Self);
-
         if(difference.magnitude < this.sphereRadius)
             return;
 
         targetPose = new Pose(this.root.position + difference.normalized * this.sphereRadius,targetPose.rotation);
-    }
-
-    public void ResetHandle() {
-        // call from outside might collide with the Process function still being executed
-        this.handle.transform.DOFollowTransform(this.root,0.5f).
-            SetEase(Ease.OutBack);
     }
 }

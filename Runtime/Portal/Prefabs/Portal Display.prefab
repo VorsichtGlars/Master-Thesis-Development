@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e35dd141887ec11499affd0be61b19e1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,7 +111,7 @@ Transform:
   m_GameObject: {fileID: 1803344475487678023}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00010000309, y: 0.1213, z: -0.0015}
+  m_LocalPosition: {x: -0.0019, y: -0.1417, z: -0.0015}
   m_LocalScale: {x: 0.33, y: 0.33, z: 0.046671905}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -426,7 +426,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8126681051436444133}
         m_TargetAssemblyTypeName: VRSYS.Photoportals.PortalControl, vrsys.photoportals
-        m_MethodName: SetCollisionAtScrenCenter
+        m_MethodName: SetCollisionAtScreenCenter
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -441,7 +441,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8126681051436444133}
         m_TargetAssemblyTypeName: VRSYS.Photoportals.PortalControl, vrsys.photoportals
-        m_MethodName: SetCollisionAtScrenCenter
+        m_MethodName: SetCollisionAtScreenCenter
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -935,6 +935,7 @@ MonoBehaviour:
     m_Reference: {fileID: -3347356889902755504, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
   portalGrabIsActive: 0
   worldGrabIsActive: 0
+  collisionAtScreenCenter: 0
   speedTransferFunction:
     serializedVersion: 2
     m_Curve:
@@ -992,10 +993,91 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  joystickSpeedTransferFunction:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.00031250715
+      value: 0
+      inSlope: 0.3636074
+      outSlope: 0.3636074
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.24378614
+    - serializedVersion: 3
+      time: 0.6632561
+      value: 4.7923546
+      inSlope: 20.25929
+      outSlope: 20.25929
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.38690707
+    - serializedVersion: 3
+      time: 0.9524563
+      value: 19.861858
+      inSlope: 63.485695
+      outSlope: 63.485695
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.041931305
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   scaleTransferFunction:
-    minimum: 0.5
-    maximum: 60
-    shape: 3
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.98524964
+      value: -20.05662
+      inSlope: -0.34192538
+      outSlope: -0.34192538
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.4011976
+    - serializedVersion: 3
+      time: -0.4750445
+      value: -11.303726
+      inSlope: 51.665436
+      outSlope: 51.665436
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.18483631
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: -0.00027092954
+      value: 0.09678027
+      inSlope: 14.340297
+      outSlope: 14.340297
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.1965909
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.44742766
+      value: 10.5711775
+      inSlope: 53.174538
+      outSlope: 53.174538
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13337523
+      outWeight: 0.1513619
+    - serializedVersion: 3
+      time: 0.9881686
+      value: 20.005455
+      inSlope: 1.0572964
+      outSlope: 1.0572964
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.45026526
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  joystickSteeringActive: 0
 --- !u!114 &5308852153995822969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1855,11 +1937,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 906587628900131690, guid: e1db8bab596ce2249bd600a2c7111946, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0001
+      value: -0.0018999969
       objectReference: {fileID: 0}
     - target: {fileID: 906587628900131690, guid: e1db8bab596ce2249bd600a2c7111946, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.1213
+      value: -0.14170001
       objectReference: {fileID: 0}
     - target: {fileID: 906587628900131690, guid: e1db8bab596ce2249bd600a2c7111946, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1905,6 +1987,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2238660641039054679, guid: e1db8bab596ce2249bd600a2c7111946, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e35dd141887ec11499affd0be61b19e1, type: 2}
     - target: {fileID: 2724409325929040871, guid: e1db8bab596ce2249bd600a2c7111946, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -1919,15 +2005,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4677231937551741590, guid: e1db8bab596ce2249bd600a2c7111946, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.08
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 4677231937551741590, guid: e1db8bab596ce2249bd600a2c7111946, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.08
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 4677231937551741590, guid: e1db8bab596ce2249bd600a2c7111946, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.08
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 5401145007080572290, guid: e1db8bab596ce2249bd600a2c7111946, type: 3}
       propertyPath: m_Layer

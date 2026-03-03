@@ -79,8 +79,10 @@ namespace VRSYS.Photoportals {
         private Matrix4x4 inital_display_to_controller_offset;
         private Vector3 worldGrabSteeringVector = Vector3.zero;
 
+        [SerializeField]
         private bool collisionAtScreenCenter;
-        public void SetCollisionAtScrenCenter(bool value) {
+
+        public void SetCollisionAtScreenCenter(bool value) {
             this.collisionAtScreenCenter = value;
         }
 
@@ -94,29 +96,18 @@ namespace VRSYS.Photoportals {
         [SerializeField]
         [Tooltip("Specify the mapping of trigger input to steering speed in meters per second. Used for bimanual steering and joystick steering.")]
         private AnimationCurve bimanualSpeedTransferFunction = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+
+        [SerializeField]
+        [Tooltip("Specify the mapping of joystick input to steering speed in meters per second. Used for joystick steering.")]
+        private AnimationCurve joystickSpeedTransferFunction = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+
         #endregion
 
         #region scaling members
         [SerializeField]
         [Tooltip("Specify the mapping of joystick input to scaling speed in meters per second.")]
-        private TestTransferfunction scaleTransferFunction = new TestTransferfunction();
-        private float scalingValue {
-            get {
-                Vector2 scaleVector = (Vector2)this.scaleInput.action?.ReadValue<Vector2>();
+        private AnimationCurve scaleTransferFunction = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
-                float scaleValue = Math.Abs(scaleVector.y);
-
-                //apply transfer function f(x) = a+b*x^c
-                scaleValue = this.scaleTransferFunction.Apply(scaleValue);
-
-                //determining the sign
-                scaleValue = Math.Sign(scaleVector.y) * scaleValue;
-
-                //frame independence
-                scaleValue = Time.deltaTime * scaleValue;
-                return scaleValue;
-            }
-        }
         private Slider sliderElement;
         #endregion
 
@@ -235,6 +226,17 @@ namespace VRSYS.Photoportals {
                 this.ApplySteeringVector(viewRepr * leftSteeringValue, Space.Self);
             }
 
+            if (this.isSelected && this.joystickSteeringActive == true) {
+                this.UpdateComponentStatus("Performing joystick based steering");
+                var joystickDirection = this.joystickValues.Direction();
+
+                var localRepr = this.transform.GetMatrix4x4().inverse * joystickDirection;
+                var viewRepr = this.viewTransform.GetMatrix4x4() * localRepr;
+                var steeringValue = this.joystickSpeedTransferFunction.Evaluate(this.joystickValues.Magnitude());
+                steeringValue *= Time.deltaTime;
+                this.ApplySteeringVector(viewRepr * steeringValue, Space.Self);
+            }
+
             //debug log
             if (this.portalGrabIsActive == true && this.worldGrabIsActive == true) {
                 this.UpdateComponentStatus("Both grab modes active, this shouldn't happen.");
@@ -256,11 +258,14 @@ namespace VRSYS.Photoportals {
             //scaling options via controller (both inputs are allowed simultaneously)
             if (this.isSelected && this.scaleInput.action?.WasPerformedThisFrame() == true) {
                 this.UpdateComponentStatus("Scaling portal view with controller input");
-                if ((this.viewTransform.localScale.x + this.scalingValue) < 1.0f) {
+                var scalingValue = this.scaleTransferFunction.Evaluate(this.scaleInput.action.ReadValue<Vector2>().y);
+                scalingValue *= Time.deltaTime;
+
+                if ((this.viewTransform.localScale.x + scalingValue) < 1.0f) {
                     this.viewTransform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
                 }
                 else {
-                    this.viewTransform.localScale += new Vector3(this.scalingValue, this.scalingValue, this.scalingValue);
+                    this.viewTransform.localScale += new Vector3(scalingValue, scalingValue, scalingValue);
                 }
                 this.UpdateScaleUI();
             }
@@ -282,9 +287,9 @@ namespace VRSYS.Photoportals {
         #endregion
         #region Editor Stuff
         private void UpdateComponentStatus(string message) {
-            return;
             this.currentStatusMessage = message;
-
+            //TODO make this a separete component and optimize it for performance
+            return;
             if (this.statusMessages.Count > 0 && this.statusMessages[this.statusMessages.Count - 1] == message) {
                 return;
             }
@@ -544,7 +549,10 @@ namespace VRSYS.Photoportals {
         private GameObject joystick;
         private GameObject joystickRoot;
         private bool joystickIsSummoned = false;
+        [SerializeField]
+        private bool joystickSteeringActive = false;
         private XRBaseInteractable joystickInteractable;
+        private JoystickValues joystickValues;
 
         private void InitJoystickSteering() {
             this.joystick = this.transform.Find("Joystick").gameObject;
@@ -557,6 +565,15 @@ namespace VRSYS.Photoportals {
             }
             this.joystickInteractable = this.joystick.GetComponentInChildren<XRBaseInteractable>();
             this.joystickInteractable.enabled = this.joystickIsSummoned;
+            this.joystickValues = this.joystick.GetComponent<JoystickValues>();
+            this.joystickValues.OnJoystickGrabbed.AddListener(()=>{
+                this.UpdateComponentStatus("Joystick Grabbed");
+                this.joystickSteeringActive = true;
+            });
+            this.joystickValues.OnJoystickReleased.AddListener(()=>{
+                this.UpdateComponentStatus("Joystick Released");
+                this.joystickSteeringActive = false;
+            });
         }
 
         public void InteractionZoneActivate(ActivateEventArgs args) {

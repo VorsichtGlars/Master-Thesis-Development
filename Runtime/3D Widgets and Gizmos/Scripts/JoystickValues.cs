@@ -16,6 +16,7 @@ public class JoystickValues : MonoBehaviour {
     public UnityEvent OnJoystickGrabbed;
     public UnityEvent OnJoystickReleased;
     private XRGrabInteractable handleInteractable;
+    private float sphereRadius;
 
 
     public void Awake() {
@@ -25,6 +26,7 @@ public class JoystickValues : MonoBehaviour {
         this.handleInteractable.selectEntered.AddListener(() => OnJoystickGrabbed.Invoke());
         this.handleInteractable.selectExited.AddListener(() => OnJoystickReleased.Invoke());
         this.handleInteractable.selectExited.AddListener(this.ResetValues);
+        this.sphereRadius = this.transform.Find("Interaction Volume").localScale.x / 2f;
     }
 
     public void Update() {
@@ -32,11 +34,18 @@ public class JoystickValues : MonoBehaviour {
         this.rotation = handle.localRotation.eulerAngles;
     }
 
-    public Vector3 GetTranslationValue() {
-        return this.translation;
+    public Vector3 Direction(Space space = Space.World) {
+        if (space == Space.Self) {
+            return this.transform.InverseTransformDirection(this.translation.normalized);
+        }
+        return this.translation.normalized;
     }
 
-    public Vector3 GetRotationValue() {
+    public float Magnitude() {
+        return this.translation.magnitude / this.sphereRadius;
+    }
+
+    public Vector3 Rotation() {
         return this.rotation;
     }
 
