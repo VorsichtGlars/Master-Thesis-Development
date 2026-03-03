@@ -896,7 +896,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: 7371829180760433478, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
+    m_Reference: {fileID: -4684873753660425289, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
   rightTriggerInput:
     m_UseReference: 1
     m_Action:
@@ -908,7 +908,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: 880741965549104688, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
+    m_Reference: {fileID: -6412917461327674054, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
   scaleInput:
     m_UseReference: 1
     m_Action:
@@ -920,7 +920,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: -1683588385981530107, guid: a7d31413095584b439b226fd8da36c86, type: 3}
+    m_Reference: {fileID: 5337146877245037457, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
   scaleResetInput:
     m_UseReference: 1
     m_Action:
@@ -932,7 +932,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: -6171108751888949699, guid: a7d31413095584b439b226fd8da36c86, type: 3}
+    m_Reference: {fileID: -3347356889902755504, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
   portalGrabIsActive: 0
   worldGrabIsActive: 0
   speedTransferFunction:
