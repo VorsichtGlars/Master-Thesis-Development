@@ -70,7 +70,7 @@ public class BubbleTechniqueWorldGrabTransformer : XRBaseGrabTransformer {
 
             //this.portalControl.EnqueueSteeringVector(direction.normalized * Time.deltaTime);
             var steeringVector = -1f * (offset.magnitude - this.radius) * this.steeringSpeed * direction.normalized * Time.deltaTime;
-            this.portalControl.EnqueueSteeringVector(steeringVector, Space.World);
+            //this.portalControl.EnqueueSteeringVector(steeringVector, Space.World); //deprecated
         }
 
         return;

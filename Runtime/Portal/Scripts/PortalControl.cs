@@ -111,6 +111,19 @@ namespace VRSYS.Photoportals {
         private Slider sliderElement;
         #endregion
 
+        #region joystick steering memebers
+
+        [Header("Joystick Steering Properties")]
+        private GameObject joystick;
+        private GameObject joystickRoot;
+        private bool joystickIsSummoned = false;
+        [SerializeField]
+        private bool joystickSteeringActive = false;
+        private XRBaseInteractable joystickInteractable;
+        private JoystickValues joystickValues;
+
+        #endregion
+
         #region Event Processing
         void Start() {
             this.grabInteractable = this.transform.GetComponent<XRGrabInteractable>();
@@ -439,6 +452,7 @@ namespace VRSYS.Photoportals {
             this.display_current.position = this.transform.position;
             this.display_current.rotation = this.transform.rotation;
 
+            //TODO decide if we still need this
             //apply steering that is provided by BubbleTechniqueWorldGrabTransformer
             if(this.worldGrabSteeringVector != Vector3.zero) {
                 this.view_initial.position += this.worldGrabSteeringVector;
@@ -461,29 +475,6 @@ namespace VRSYS.Photoportals {
         #endregion
 
         #region Steering
-        public void ApplySteering(Vector3 vector, bool inWorldSpace = false) {
-            //how do i want the steering to look like?
-            //is it meters per second, so shall i make it frame independent
-            this.viewTransform.SetMatrix4x4(this.viewTransform.GetMatrix4x4() * Matrix4x4.Translate(vector));
-            //this.viewTransform.position += vector;
-            //this.viewTransform.position += this.viewTransform.forward * this.steeringValue;
-        }
-        public void EnqueueSteeringVector(Vector3 vector, Space space) {
-            if(space == Space.World) {
-                //TODO: view_initial is only used for world grab
-                this.worldGrabSteeringVector = this.viewTransform.TransformVector(vector);
-            }
-            if(space == Space.Self) {
-                this.worldGrabSteeringVector = vector;
-            }
-        }
-
-        public void ApplySteeringVector(Vector3 direction, float value, Space space) {
-            value = this.speedTransferFunction.Evaluate(value);
-            this.ApplySteeringVector(direction * value, space);
-            
-        }
-
         public void ApplySteeringVector(Vector3 vector, Space space) {
             if(space == Space.World)
                 this.viewTransform.position += this.viewTransform.TransformVector(vector);
@@ -544,16 +535,6 @@ namespace VRSYS.Photoportals {
         //TODOs
         // - register activate event in code
         // - distribute active state of XRBaseInteractable
-
-        [Header("Joystick Steering Properties")]
-        private GameObject joystick;
-        private GameObject joystickRoot;
-        private bool joystickIsSummoned = false;
-        [SerializeField]
-        private bool joystickSteeringActive = false;
-        private XRBaseInteractable joystickInteractable;
-        private JoystickValues joystickValues;
-
         private void InitJoystickSteering() {
             this.joystick = this.transform.Find("Joystick").gameObject;
             if(this.joystick == null) {
