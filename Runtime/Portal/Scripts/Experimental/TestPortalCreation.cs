@@ -71,33 +71,18 @@ namespace VRSYS.Photoportals {
             if(NetworkUser.LocalInstance.avatarAnatomy is VRSYS.Core.Avatar.AvatarHMDAnatomy) {
                 var avatar = NetworkUser.LocalInstance.avatarAnatomy as VRSYS.Core.Avatar.AvatarHMDAnatomy;
 
-                if (this.buttonPressRight.action != null) {
-                    this.buttonPressRight.action.performed += (ctx) => {
-                        Matrix4x4 spawnMatrix = avatar.rightHand.GetMatrix4x4();
-                        this.CreatePortalServerRpc(spawnMatrix.GetPosition(), spawnMatrix.rotation);
-                    };
-                }
+                if (this.buttonPressRight.action != null)
+                    this.buttonPressRight.action.performed += (ctx) => this.CreatePortalServerRpc(avatar.rightHand.position, avatar.rightHand.rotation);
 
-                if (this.buttonPressLeft.action != null) {
-                    this.buttonPressLeft.action.performed += (ctx) => {
-                        Matrix4x4 spawnMatrix = avatar.leftHand.GetMatrix4x4();
-                        this.CreatePortalServerRpc(spawnMatrix.GetPosition(), spawnMatrix.rotation);
-                    };
-                }
+                if (this.buttonPressLeft.action != null)
+                    this.buttonPressLeft.action.performed += (ctx) => this.CreatePortalServerRpc(avatar.leftHand.position, avatar.leftHand.rotation);
 
-                if(this.doubleTapRight.action != null) {
-                    this.doubleTapRight.action.performed += (ctx) => {
-                        Matrix4x4 spawnMatrix = avatar.rightHand.GetMatrix4x4();
-                        this.CreatePortalServerRpc(spawnMatrix.GetPosition(), spawnMatrix.rotation);
-                    };
-                }
+                if(this.doubleTapRight.action != null)
+                    this.doubleTapRight.action.performed += (ctx) => this.CreatePortalServerRpc(avatar.rightHand.position, avatar.rightHand.rotation);
 
-                if(this.doubleTapLeft.action != null) {
-                    this.doubleTapLeft.action.performed += (ctx) => {
-                        Matrix4x4 spawnMatrix = avatar.leftHand.GetMatrix4x4();
-                        this.CreatePortalServerRpc(spawnMatrix.GetPosition(), spawnMatrix.rotation);
-                    };    
-                }
+                if(this.doubleTapLeft.action != null)
+                    this.doubleTapLeft.action.performed += (ctx) => this.CreatePortalServerRpc(avatar.leftHand.position, avatar.leftHand.rotation);
+            
             }
             else if(NetworkUser.LocalInstance.avatarAnatomy is VRSYS.Core.Avatar.AvatarAnatomy) {
                 var avatar = NetworkUser.LocalInstance.avatarAnatomy as VRSYS.Core.Avatar.AvatarAnatomy;
@@ -199,21 +184,6 @@ namespace VRSYS.Photoportals {
                 }
             });
 
-            /**
-            Transform deleteGO = display.transform.Find("UI Poke Components/Delete Button");
-            Button buttonComponent = deleteGO.GetComponentInChildren<Button>();
-            buttonComponent.onClick.AddListener(
-                () => {
-                    ExtendedLogger.LogInfo(this.GetType().Name, "Deleting portal via UI button", this);
-                    displayNetworkObject.Despawn();
-                    viewNetworkObject.Despawn();
-                    //GameObject.Destroy(display);
-                    //GameObject.Destroy(view);
-                    //this.registry.Remove(newPortal);
-                }
-            );
-            **/
-
             /*          
             Transform anchoringGO = display.transform.Find("UI Poke Components/Anchoring Toggle");
             toggleComponent = anchoringGO.GetComponentInChildren<Toggle>();
@@ -224,111 +194,27 @@ namespace VRSYS.Photoportals {
             );
             */
 
-            /*
-            Transform firstScaleOptionGO = display.transform.Find("UI Poke Components/Scale Option A Toggle");
-            Transform secondScaleOptionGO = display.transform.Find("UI Poke Components/Scale Option B Toggle");
-            Transform thirdScaleOptionGO = display.transform.Find("UI Poke Components/Scale Option C Toggle");
-
-            Toggle toggleComponentOptionA = firstScaleOptionGO.GetComponentInChildren<Toggle>();
-            Toggle toggleComponentOptionB = secondScaleOptionGO.GetComponentInChildren<Toggle>();
-            Toggle toggleComponentOptionC = thirdScaleOptionGO.GetComponentInChildren<Toggle>();
-
-            toggleComponentOptionA.onValueChanged.AddListener(
-                (value) => {
-                    Debug.Log("toggleComponentOptionA.onValueChanged");
-                    if(value == true) {
-                        toggleComponentOptionB.SetIsOnWithoutNotify(false);
-                        toggleComponentOptionB.graphic.SetAllDirty();
-                        toggleComponentOptionC.SetIsOnWithoutNotify(false);
-                        toggleComponentOptionC.graphic.SetAllDirty();
-                        portalControl.SetScale(1f);
-                    }
-                    if(value == false) {
-                        toggleComponentOptionA.SetIsOnWithoutNotify(true);
-                        toggleComponentOptionA.graphic.SetAllDirty();
-                    }
-                }
-            );
-
-            toggleComponentOptionB.onValueChanged.AddListener(
-                (value) => {
-                    Debug.Log("toggleComponentOptionB.onValueChanged");
-                    if(value == true) {
-                        toggleComponentOptionA.SetIsOnWithoutNotify(false);
-                        toggleComponentOptionA.graphic.SetAllDirty();
-                        toggleComponentOptionC.SetIsOnWithoutNotify(false);
-                        toggleComponentOptionC.graphic.SetAllDirty();
-                        portalControl.SetScale(10f);
-                    }
-                    if(value == false) {
-                        toggleComponentOptionA.SetIsOnWithoutNotify(true);
-                        toggleComponentOptionA.graphic.SetAllDirty();
-                        portalControl.SetScale(1f);
-                    }
-                }
-            );
-            
-            toggleComponentOptionC.onValueChanged.AddListener(
-                (value) => {
-                    Debug.Log("toggleComponentOptionC.onValueChanged");
-                    if(value == true) {
-                        toggleComponentOptionA.SetIsOnWithoutNotify(false);
-                        toggleComponentOptionA.graphic.SetAllDirty();
-                        toggleComponentOptionB.SetIsOnWithoutNotify(false);
-                        toggleComponentOptionB.graphic.SetAllDirty();
-                        portalControl.SetScale(500f);
-                    }
-                    if(value == false) {
-                        toggleComponentOptionA.SetIsOnWithoutNotify(true);
-                        toggleComponentOptionA.graphic.SetAllDirty();
-                        portalControl.SetScale(1f);
-
-                    }
-                }
-            );
-
-            toggleComponentOptionA.isOn = true;
-            */
-
             Debug.Log("Adding Listener to Scale Slider for portal scaling");
             Transform scaleGO = display.transform.Find("UI Poke Components/Scale Slider");
             Slider sliderComponent = scaleGO.GetComponentInChildren<Slider>();
-            //viewNetworkObject.GetComponent<NetworkTransform>().
             if (sliderComponent == null) {
                 Debug.LogWarning("No slider component found for scale adjustment in portal UI.");
             }
 
-            sliderComponent?.onValueChanged.AddListener(
-                (value) => {
-                    switch (value) {
-                        case 0f:
-                            portalControl.SetScale(1f, false);
-                            break;
-
-                        case 1f:
-                            portalControl.SetScale(10f, false);
-                            break;
-
-                        case 2f:
-                            portalControl.SetScale(50f, false);
-                            break;
-                        
-                        case 3f:
-                            portalControl.SetScale(100f, false);                            
-                            break;
-                  
-                        case 4f:
-                            portalControl.SetScale(500f, false);
-                            break;
-
-                        default:
-                            Debug.LogWarning("No scale value found for slider value.");
-                            break;
-                    }
-                }
-            );
+            sliderComponent?.onValueChanged.AddListener(value => {
+                float targetScale = value switch {
+                    0f => 1f,
+                    1f => 10f,
+                    2f => 50f,
+                    3f => 100f,
+                    4f => 500f,
+                    _ => 1f
+                };
+                portalControl.SetScale(targetScale, false);
+            });
 
             /**
+            //TODO Decide wether to have this as code or as inspector assignment
             var simpleInteractable = display.GetComponentInChildren<XRSimpleInteractable>();
             grabInteractable.firstSelectEntered.AddListener(portalControl.SwitchToBimanualInteraction);
             grabInteractable.lastSelectExited.AddListener(portalControl.SwitchToUnimanualInteraction);
@@ -336,15 +222,6 @@ namespace VRSYS.Photoportals {
             GameObject viewInteractionZone = display.transform.Find("PortalViewInteractionZone").gameObject;
             grabInteractable.firstSelectEntered.AddListener(() => viewInteractionZone.SetActive(true));
             grabInteractable.lastSelectExited.AddListener(() => viewInteractionZone.SetActive(false));
-            **/
-
-            //TODO Teleport on Button Press
-            /**
-            Transform avatar = NetworkUser.LocalInstance.transform;
-            Matrix4x4 relativeOffsetMatrix = this.selectedPortal.display.transform.GetMatrix4x4().inverse * avatar.GetMatrix4x4();
-            Matrix4x4 absoluteWorldPositon = this.selectedPortal.view.transform.GetMatrix4x4() * relativeOffsetMatrix;
-            avatar.position = absoluteWorldPositon.GetPosition();
-            avatar.rotation = absoluteWorldPositon.rotation;
             **/
 
             ExtendedLogger.LogInfo(this.GetType().Name, "CreatePortal Done!", this);
