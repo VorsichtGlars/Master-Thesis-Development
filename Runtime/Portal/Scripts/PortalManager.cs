@@ -15,33 +15,13 @@ using VRSYS.Photoportals.Networking;
 using DG.Tweening;
 
 namespace VRSYS.Photoportals {
-
-    [System.Serializable]
-    public class Portal {
-        [SerializeField]
-        [Tooltip("The GameObject that resembles the display in the scenegraph")]
-        public GameObject display;
-
-        [SerializeField]
-        [Tooltip("The GameObject that resembles the view in the scenegraph")]
-        public GameObject view;
-
-        public Material material;
-        public RenderTexture leftRenderTexture;
-        public RenderTexture rightRenderTexture;
-
-        public void DeleteAllGameObjects() {
-            GameObject.Destroy(this.display);
-            GameObject.Destroy(this.view);
-        }
-    }
-
-    public class TestPortalCreation : NetworkBehaviour, INetworkUserCallbacks  {
+    public class PortalManager : NetworkBehaviour, INetworkUserCallbacks  {
+        #region Portal Creation Members
+        [Header("References for Portal Creation")]
         public GameObject portalPrefab;
         public GameObject displayPrefab;
         public GameObject viewPrefab;
         public Material materialToInstantiate;
-        public Transform spawnPosition;
 
         [Header("HMD Input Actions for Portal Creation")]
         public InputActionProperty buttonPressRight;
@@ -55,19 +35,30 @@ namespace VRSYS.Photoportals {
         [Header("Desktop Input Actions for Portal Creation")]
         public InputActionProperty desktopButtonPress;
 
+        [System.Serializable]
+        struct PortalRegistryEntry {
+            [SerializeField]
+            [Tooltip("The GameObject that resembles the display in the scenegraph")]
+            public GameObject display;
+
+            [SerializeField]
+            [Tooltip("The GameObject that resembles the view in the scenegraph")]
+            public GameObject view;
+        }
+        
         [SerializeField]
-        public List<Portal> registry;
-        private int counter = 0;
+        private List<PortalRegistryEntry> registry;
+        #endregion
 
+        #region Debugging Utilities Members
+        [Header("Debugging Utilities")]
+        [SerializeField]
+        List<RenderStateController> widgetsAndGizmosRenderStateControllers;
+        #endregion
+
+        #region State Handling
         public void OnLocalNetworkUserSetup() {
-            this.RegisterPortalCreationCallbacks();
-        }
 
-        public void OnRemoteNetworkUserSetup(NetworkUser user) {
-            //throw new System.NotImplementedException();
-        }
-
-        public void RegisterPortalCreationCallbacks() {
             if(NetworkUser.LocalInstance.avatarAnatomy is VRSYS.Core.Avatar.AvatarHMDAnatomy) {
                 var avatar = NetworkUser.LocalInstance.avatarAnatomy as VRSYS.Core.Avatar.AvatarHMDAnatomy;
 
@@ -95,6 +86,42 @@ namespace VRSYS.Photoportals {
                 }
                 
             }
+        }
+
+        public void OnRemoteNetworkUserSetup(NetworkUser user) {
+            //throw new System.NotImplementedException();
+        }
+        #endregion
+        
+        #region Portal Creation Methods
+        [ContextMenu("CreatePortal")]
+        private void CreatePortal() {
+            this.CreatePortalServerRpc(Vector3.zero, Quaternion.identity);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void CreatePortalServerRpc(Vector3 position, Quaternion rotation) {
+            ExtendedLogger.LogInfo(this.GetType().Name, "CreatePortal", this);
+            
+            PortalRegistryEntry entry = new PortalRegistryEntry();
+            entry.display = Instantiate(this.displayPrefab);
+            entry.display.name = $"Portal #{this.registry.Count} Display";
+            entry.display.GetComponent<NetworkObject>().Spawn();
+
+            entry.view = Instantiate(this.viewPrefab);
+            entry.view.name = $"Portal #{this.registry.Count} View";
+            entry.view.GetComponent<NetworkObject>().Spawn();
+
+            this.SetupPortalRpc(
+                entry.display.GetComponent<NetworkObject>().NetworkObjectId,
+                entry.view.GetComponent<NetworkObject>().NetworkObjectId
+            );
+
+            entry.display.transform.position = entry.view.transform.position = position;
+            entry.display.transform.rotation = entry.view.transform.rotation = rotation;
+            entry.view.transform.Translate(Vector3.forward * 0.01f, Space.Self);
+
+            this.registry.Add(entry);
         }
 
         [Rpc(SendTo.Everyone, RequireOwnership = false)]
@@ -226,66 +253,32 @@ namespace VRSYS.Photoportals {
 
             ExtendedLogger.LogInfo(this.GetType().Name, "CreatePortal Done!", this);
         }
+        #endregion
 
-        [ContextMenu("CreatePortal")]
-        private void CreatePortal() {
-            var spawnMatrix = Matrix4x4.identity;
-            this.CreatePortalServerRpc(spawnMatrix.GetPosition(), spawnMatrix.rotation);
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void CreatePortalServerRpc(Vector3 position, Quaternion rotation) {
-            ExtendedLogger.LogInfo(this.GetType().Name, "CreatePortal", this);
-            
-            Portal newPortal = new Portal();
-            this.counter++;
-            this.registry.Add(newPortal);
-
-            newPortal.display = Instantiate(this.displayPrefab);
-            newPortal.display.name = $"Portal #{this.counter} Display";
-            newPortal.display.GetComponent<NetworkObject>().Spawn();
-
-            newPortal.view = Instantiate(this.viewPrefab);
-            newPortal.view.name = $"Portal #{this.counter} View";
-            newPortal.view.GetComponent<NetworkObject>().Spawn();
-
-            this.SetupPortalRpc(
-                newPortal.display.GetComponent<NetworkObject>().NetworkObjectId,
-                newPortal.view.GetComponent<NetworkObject>().NetworkObjectId
-            );
-
-            //spawn position
-            
-            //todo: distringuish between desktop and hmd user
-        /* if(typeof(NetworkUser.LocalInstance.avatarAnatomy) is AvatarAnatomy) {
-                this.spawnPosition = Transform.Zero;
+        #region Debugging Utilities Methods
+        [ContextMenu("RetrieveAllWidgetsAndGizmos()")]
+        private void RetrieveAllWidgetsAndGizmos() {
+            foreach (var item in GameObject.FindGameObjectsWithTag("3DUI")) {
+                var controller = item.GetComponent<RenderStateController>();
+                if (controller == null)
+                    return;
+                this.widgetsAndGizmosRenderStateControllers.Add(controller);
             }
-
-            if(typeof(NetworkUser.LocalInstance.avatarAnatomy) is AvatarHMDAnatomy)
-            {
-                var avatar = NetworkUser.LocalInstance.avatarAnatomy as AvatarHMDAnatomy;
-                this.spawnPosition = avatar.rightHand;
-            } */
-            newPortal.display.transform.position = newPortal.view.transform.position = position;
-            newPortal.display.transform.rotation = newPortal.view.transform.rotation = rotation;
-            newPortal.view.transform.Translate(Vector3.forward * 0.01f, Space.Self);
         }
 
-        public Portal GetPortalByDisplayName(string displayName) {
-            foreach (Portal item in this.registry) {
-                if (item.display.name != displayName)
-                    continue;
-                return item;
+        [ContextMenu("EnableAllWidgetsAndGizmos()")]
+        private void EnableAllWidgetsAndGizmos() {
+            foreach (var controller in this.widgetsAndGizmosRenderStateControllers) {
+                controller.Activate();
             }
-            return null;
         }
-        public Portal GetPortalByViewName(string viewName) {
-            foreach (Portal item in this.registry) {
-                if (item.view.name != viewName)
-                    continue;
-                return item;
+
+        [ContextMenu("DisableAllWidgetsAndGizmos()")]
+        private void DisableAllWidgetsAndGizmos() {
+            foreach (var controller in this.widgetsAndGizmosRenderStateControllers) {
+                controller.Deactivate();
             }
-            return null;
         }
+        #endregion
     }
 }

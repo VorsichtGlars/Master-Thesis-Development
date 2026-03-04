@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 2660969772062872893}
   - component: {fileID: 3143836334330602290}
   - component: {fileID: 744959003083549134}
-  - component: {fileID: 988100990580205162}
-  - component: {fileID: 2185766001474499780}
   - component: {fileID: 2762014290073624146}
   m_Layer: 0
   m_Name: Portal Manager
@@ -48,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1803927106
+  GlobalObjectIdHash: 2679080924
   InScenePlacedSourceGlobalObjectIdHash: 1803927106
   DeferredDespawnTick: 0
   Ownership: 1
@@ -78,7 +76,6 @@ MonoBehaviour:
   displayPrefab: {fileID: 3785651222127509849, guid: 37e5f2ffaf380d64aa741d0b6ec6e91c, type: 3}
   viewPrefab: {fileID: 2126383613563301595, guid: f6dc4a6ac71390345a671f1b3a61bba3, type: 3}
   materialToInstantiate: {fileID: 2100000, guid: 3fb85c0e29a5c83428da9c8e51a95486, type: 2}
-  spawnPosition: {fileID: 0}
   buttonPressRight:
     m_UseReference: 1
     m_Action:
@@ -140,32 +137,6 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 5062046417304100245, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
   registry: []
---- !u!114 &988100990580205162
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7174691894995242127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 245c96193dc0cbe49a7529803ee2c0d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  note: Test Portal Creation should mostly be moved to the Portal and the Display
-    Prefab respectively
---- !u!114 &2185766001474499780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7174691894995242127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d31b5a37acb8c34f853e9189013884d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   widgetsAndGizmosRenderStateControllers: []
 --- !u!114 &2762014290073624146
 MonoBehaviour:
