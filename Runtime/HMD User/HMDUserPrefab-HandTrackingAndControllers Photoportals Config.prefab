@@ -64,6 +64,22 @@ PrefabInstance:
       propertyPath: 'm_StartingInteractionOverridesMap.Array.data[1].overrideGroupMembers.Array.data[0]'
       value: 
       objectReference: {fileID: 5643806348445798160}
+    - target: {fileID: 752945317807299475, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 383
+      objectReference: {fileID: 0}
+    - target: {fileID: 752945317807299475, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 853365780212281681, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 383
+      objectReference: {fileID: 0}
+    - target: {fileID: 853365780212281681, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     - target: {fileID: 920141110983797090, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -138,7 +154,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1389733193041244091, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_PhysicsLayerMask.m_Bits
-      value: 64
+      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 1389733193041244091, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_InteractionLayers.m_Bits
@@ -274,7 +290,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4886640192717576959, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_PhysicsLayerMask.m_Bits
-      value: 64
+      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 4886640192717576959, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_InteractionLayers.m_Bits
@@ -376,6 +392,14 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 0.01
       objectReference: {fileID: 0}
+    - target: {fileID: 6374959040392023697, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 383
+      objectReference: {fileID: 0}
+    - target: {fileID: 6374959040392023697, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     - target: {fileID: 6804386596978702845, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -383,6 +407,14 @@ PrefabInstance:
     - target: {fileID: 6821607427837606212, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_Radius
       value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 6821607427837606212, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 383
+      objectReference: {fileID: 0}
+    - target: {fileID: 6821607427837606212, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 7106348122578697188, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_Layer
@@ -454,7 +486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7813255487657143805, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_PhysicsLayerMask.m_Bits
-      value: 64
+      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 7813255487657143805, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_InteractionLayers.m_Bits
@@ -738,7 +770,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8975446742627626162, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_PhysicsLayerMask.m_Bits
-      value: 64
+      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 8975446742627626162, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_InteractionLayers.m_Bits
