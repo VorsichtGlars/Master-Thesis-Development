@@ -5,7 +5,7 @@ using UnityEngine;
 namespace VRSYS.Photoportals {
 
     [CustomEditor(typeof(SimpleEventDebugger))]
-    public class SimpleEventDebuggerEditor : Editor {
+    public class SimpleEventDebuggerEditor : UnityEditor.Editor {
         Vector2 scrollPos;
         int maxLines = 10;
         int prevHistoryCount = 0;

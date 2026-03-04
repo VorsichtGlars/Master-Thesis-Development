@@ -14,7 +14,8 @@
         "Unity.XR.CoreUtils",
         "Unity.XR.Hands",
         "ParrelSync",
-        "vrsys.core"
+        "vrsys.core",
+        "vrsys.core.Editor"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
