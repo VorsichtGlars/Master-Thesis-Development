@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2758848072
+  GlobalObjectIdHash: 1803927106
   InScenePlacedSourceGlobalObjectIdHash: 1803927106
   DeferredDespawnTick: 0
   Ownership: 1
@@ -90,7 +90,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: 2300911260926662560, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
+    m_Reference: {fileID: 7397753526703987581, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
   buttonPressLeft:
     m_UseReference: 1
     m_Action:
@@ -102,7 +102,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: 9129577915066430493, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
+    m_Reference: {fileID: -7065593589657873949, guid: d3e1bec5d05940341bbe734115e1a9e6, type: 3}
   doubleTapRight:
     m_UseReference: 1
     m_Action:
