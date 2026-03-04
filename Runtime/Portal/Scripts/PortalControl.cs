@@ -124,6 +124,13 @@ namespace VRSYS.Photoportals {
 
         #endregion
 
+        #region anchoring and locking members
+
+        private bool rotationLock = true;
+        private bool anchoringIsActive = false;
+
+        #endregion
+
         #region Event Processing
         void Start() {
             this.grabInteractable = this.transform.GetComponent<XRGrabInteractable>();
@@ -155,8 +162,6 @@ namespace VRSYS.Photoportals {
 
         void Update() {
             //evaluate input
-            //Debug.Log($"Trigger Left {(float)this.leftTriggerInput.action?.ReadValue<float>()}");
-            //Debug.Log($"Trigger Right {(float)this.rightTriggerInput.action?.ReadValue<float>()}");
 
             //one handed controller view grab init (needs to be before steering as steering uses variables here)
             //TODO
@@ -168,8 +173,6 @@ namespace VRSYS.Photoportals {
             float rightTriggerValue = (float)this.rightTriggerInput.action?.ReadValue<float>();
             leftTriggerValue = (float)Math.Round(leftTriggerValue, 2);
             rightTriggerValue = (float)Math.Round(rightTriggerValue, 2);
-            //Debug.Log($"Trigger Left {leftTriggerValue}");
-            //Debug.Log($"Trigger Right {rightTriggerValue}");
 
             if (this.worldGrabIsActive == false && this.portalGrabIsActive == false && leftTriggerValue > 0.1f && this.isSelectedWithLeftHand) {
                 this.UpdateComponentStatus("Starting portal grab with left hand");
@@ -255,7 +258,6 @@ namespace VRSYS.Photoportals {
                 this.UpdateComponentStatus("Both grab modes active, this shouldn't happen.");
             }
 
-
             //one handed controller view grab frame update
             if (this.portalGrabIsActive == true) {
                 this.UpdateComponentStatus("Updating portal grab");
@@ -298,6 +300,7 @@ namespace VRSYS.Photoportals {
             }
         }
         #endregion
+
         #region Editor Stuff
         private void UpdateComponentStatus(string message) {
             this.currentStatusMessage = message;
@@ -311,33 +314,16 @@ namespace VRSYS.Photoportals {
         }
 
         #endregion
+
         #region Scaling
         private void UpdateScaleUI() {
-            //gui element
-            float scaleValue = this.viewTransform.lossyScale.x;
-
-            //slider positioning
-            float mappedScaleValue = 1f;
-            switch (scaleValue) {
-                case float n when (0f < n && n < 10f):
-                    mappedScaleValue = 0f;
-                    break;
-                case float   n when (10f < n && n < 50f):
-                    mappedScaleValue = 1f;
-                    break;
-                case float n when (50f < n && n < 100f):
-                    mappedScaleValue = 2f;
-                    break;
-                case float n when (100f < n && n < 500f):
-                    mappedScaleValue = 3f;
-                    break;
-                case float n when (500f < n && n < 1000f):
-                    mappedScaleValue = 4f;
-                    break;
-                default:
-                    mappedScaleValue = 0f;
-                    break;
-            }
+            float mappedScaleValue = this.viewTransform.lossyScale.x switch {
+                >= 500f  => 4f,
+                >= 100f and < 500f => 3f,
+                >= 50f and < 100f => 2f,
+                >= 10f and < 50f => 1f,
+                _ => 0f
+            };
             this.sliderElement.SetValueWithoutNotify(mappedScaleValue);
         }
 
@@ -367,6 +353,7 @@ namespace VRSYS.Photoportals {
             return this.viewTransform.lossyScale.x;
         }
         #endregion
+
         #region PortalGrab
         private void StartPortalGrab() {
             this.clutchingOriginDisplay = this.grabInteractable.transform.GetMatrix4x4();
@@ -428,21 +415,13 @@ namespace VRSYS.Photoportals {
         public void InteractionZoneSelectEnter(SelectEnterEventArgs args){
             this.UpdateComponentStatus("InteractionZoneSelectEnter triggered, switching to bimanual interaction");
             this.input = args.interactorObject.transform;
-            /**
-            if (args.interactorObject.handedness == InteractorHandedness.Left)
-                this.input = (NetworkUser.LocalInstance.avatarAnatomy as AvatarHMDAnatomy).leftHand;
-            if (args.interactorObject.handedness == InteractorHandedness.Right)
-                this.input = (NetworkUser.LocalInstance.avatarAnatomy as AvatarHMDAnatomy).rightHand;
-            **/
             this.SetupBimanualInteractionHelpers();
             this.worldGrabIsActive = true;
-            //this.portalGrabIsActive = false;
         }
 
         public void InteractionZoneSelectExit(SelectExitEventArgs args) {
             this.UpdateComponentStatus("InteractionZoneSelectExit triggered, switching to unimanual interaction");
             this.worldGrabIsActive = false;
-            //this.portalGrabIsActive = false;
             this.inital_display_to_controller_offset = Matrix4x4.identity;
         }
 
@@ -509,16 +488,17 @@ namespace VRSYS.Photoportals {
         #region Creation and Deletion
         [ContextMenu("Despawn")]
         public void Despawn() {
+            //TODO add portalmanager
+            //this.portalManager.DeregisterDisplay(this); etc
             this.UpdateComponentStatus($"Despawning Portal {this.name}");
             this.viewTransform.GetComponent<NetworkObject>().Despawn();
             this.GetComponent<NetworkObject>().Despawn();
+            Destroy(this.interaction_root);
         }
 
         #endregion
 
         #region Rotation Lock
-
-        private bool rotationLock = true;
         public void EnableRotationLock() {
             this.rotationLock = true;
         }
