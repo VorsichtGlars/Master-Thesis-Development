@@ -19,12 +19,9 @@ using Unity.Netcode;
 using Unity.XR.CoreUtils;
 using System.Collections.Generic;
 
+
 namespace VRSYS.Photoportals {
     public class PortalControl : MonoBehaviour {
-        [Header("Component Status")]
-        private string currentStatusMessage;
-        private List<string> statusMessages = new List<string>();
-
         [Header("General Properties")]
         public Transform viewTransform;
         private XRGrabInteractable grabInteractable;
@@ -303,14 +300,8 @@ namespace VRSYS.Photoportals {
 
         #region Editor Stuff
         private void UpdateComponentStatus(string message) {
-            this.currentStatusMessage = message;
             //TODO make this a separete component and optimize it for performance
             return;
-            if (this.statusMessages.Count > 0 && this.statusMessages[this.statusMessages.Count - 1] == message) {
-                return;
-            }
-
-            this.statusMessages.Add(message);
         }
 
         #endregion
