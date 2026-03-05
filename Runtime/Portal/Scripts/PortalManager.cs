@@ -18,7 +18,6 @@ namespace VRSYS.Photoportals {
     public class PortalManager : NetworkBehaviour, INetworkUserCallbacks  {
         #region Portal Creation Members
         [Header("References for Portal Creation")]
-        public GameObject portalPrefab;
         public GameObject displayPrefab;
         public GameObject viewPrefab;
         public Material materialToInstantiate;
