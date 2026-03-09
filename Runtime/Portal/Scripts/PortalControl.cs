@@ -22,7 +22,6 @@ using System.Collections.Generic;
 
 namespace VRSYS.Photoportals {
     public class PortalControl : MonoBehaviour {
-        [Header("General Properties")]
         public Transform viewTransform;
         private XRGrabInteractable grabInteractable;
         private GameObject interaction_root;
@@ -49,34 +48,21 @@ namespace VRSYS.Photoportals {
             }
         }
 
-        [Header("Controller Inputs Properties")]
         public InputActionProperty leftTriggerInput;
         public InputActionProperty rightTriggerInput;
-        public InputActionProperty scaleInput;
-        public InputActionProperty scaleResetInput;
-
-        [Header("Advanced Setting")]
-
         #region grabbing members
 
-        [SerializeField]
         private bool portalGrabIsActive = false;
         private Matrix4x4 offsetMatrix = Matrix4x4.identity;
         private Matrix4x4 clutchingOriginDisplay = Matrix4x4.identity;
         private Matrix4x4 clutchingOriginView = Matrix4x4.identity;
 
-        [SerializeField]
         private bool worldGrabIsActive = false;
         private Transform input;
         private Transform input_initial, input_current;
         private Transform display_initial, display_current;
         private Transform view_initial, view_current;
-        private Transform input_initial_in_view_current;
-        private Transform input_current_in_view_current;
         private Matrix4x4 inital_display_to_controller_offset;
-        private Vector3 worldGrabSteeringVector = Vector3.zero;
-
-        [SerializeField]
         private bool collisionAtScreenCenter;
 
         public void SetCollisionAtScreenCenter(bool value) {
@@ -101,6 +87,8 @@ namespace VRSYS.Photoportals {
         #endregion
 
         #region scaling members
+        public InputActionProperty scaleInput;
+        public InputActionProperty scaleResetInput;
         [SerializeField]
         [Tooltip("Specify the mapping of joystick input to scaling speed in meters per second.")]
         private AnimationCurve scaleTransferFunction = AnimationCurve.Linear(0f, 0f, 1f, 1f);
@@ -110,11 +98,9 @@ namespace VRSYS.Photoportals {
 
         #region joystick steering memebers
 
-        [Header("Joystick Steering Properties")]
         private GameObject joystick;
         private GameObject joystickRoot;
         private bool joystickIsSummoned = false;
-        [SerializeField]
         private bool joystickSteeringActive = false;
         private XRBaseInteractable joystickInteractable;
         private JoystickValues joystickValues;
@@ -389,8 +375,6 @@ namespace VRSYS.Photoportals {
             this.display_current = this.interaction_root.transform.Find("display_current").transform;
             this.view_initial = this.interaction_root.transform.Find("view_initial").transform;
             this.view_current = this.interaction_root.transform.Find("view_current").transform;
-            this.input_initial_in_view_current = this.interaction_root.transform.Find("input_initial_in_view_current").transform;
-            this.input_current_in_view_current = this.interaction_root.transform.Find("input_current_in_view_current").transform;
         }
         private void SetupBimanualInteractionHelpers() {
             this.display_initial.position = this.grabInteractable.transform.position;
@@ -421,13 +405,6 @@ namespace VRSYS.Photoportals {
             this.input_current.rotation = this.input.rotation;
             this.display_current.position = this.transform.position;
             this.display_current.rotation = this.transform.rotation;
-
-            //TODO decide if we still need this
-            //apply steering that is provided by BubbleTechniqueWorldGrabTransformer
-            if(this.worldGrabSteeringVector != Vector3.zero) {
-                this.view_initial.position += this.worldGrabSteeringVector;
-                this.worldGrabSteeringVector = Vector3.zero;
-            }
 
             //calculate relative offset
             Matrix4x4 current_display_to_controller_offset = this.display_current.GetMatrix4x4().inverse * this.input_current.GetMatrix4x4();
@@ -479,8 +456,6 @@ namespace VRSYS.Photoportals {
         #region Creation and Deletion
         [ContextMenu("Despawn")]
         public void Despawn() {
-            //TODO add portalmanager
-            //this.portalManager.DeregisterDisplay(this); etc
             this.UpdateComponentStatus($"Despawning Portal {this.name}");
             this.viewTransform.GetComponent<NetworkObject>().Despawn();
             this.GetComponent<NetworkObject>().Despawn();

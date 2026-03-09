@@ -31,6 +31,7 @@ namespace VRSYS.Photoportals {
         
         [Header("Desktop Input Actions for Portal Creation")]
         public InputActionProperty desktopButtonPress;
+
         #endregion
 
         #region Debugging Utilities Members
@@ -164,10 +165,6 @@ namespace VRSYS.Photoportals {
             grabInteractable.lastSelectExited.AddListener(displayOwnershipManager.ReturnOwnershipToServer);
             grabInteractable.lastSelectExited.AddListener(viewOwnershipManager.ReturnOwnershipToServer);
 
-            // tweak initial configuration of view so it the portal display is not dark
-            view.transform.Translate(view.transform.forward * 0.1f, Space.World);
-            var offAxisProjections = view.GetComponentsInChildren<OffAxisProjection>();
-            
             //register UI
             Transform toggleClippingGO = display.transform.Find("Poke Interactions Canvas/Clipping Plane Toggle");
             Toggle toggleComponent = toggleClippingGO.GetComponentInChildren<Toggle>();
