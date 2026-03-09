@@ -69,6 +69,19 @@ namespace VRSYS.Photoportals {
                 }
                 
             }
+
+            // set each camera to render everything, then exclude CameraIgnore
+            // this can conflict with other culling mask configurations
+            int cameraIgnoreLayer = LayerMask.NameToLayer("CameraIgnore");
+            if (cameraIgnoreLayer == -1) {
+                Debug.LogWarning("Layer 'CameraIgnore' was not found.");
+            }
+            else {
+                foreach (var camera in Camera.allCameras) {
+                    camera.cullingMask = ~0;
+                    camera.cullingMask &= ~(1 << cameraIgnoreLayer);
+                }
+            }
         }
 
         public void OnRemoteNetworkUserSetup(NetworkUser user) {
