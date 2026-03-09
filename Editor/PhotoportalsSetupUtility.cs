@@ -1,6 +1,6 @@
-using PlasticGui;
+#if UNITY_EDITOR
+
 using UnityEditor;
-using VRSYS.Core.Editor;
 using VRSYS.Core.Logging;
 
 namespace VRSYS.Photoportals.Editor {
@@ -58,3 +58,5 @@ namespace VRSYS.Photoportals.Editor {
         #endregion
     }
 }
+
+#endif
