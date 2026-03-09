@@ -290,7 +290,7 @@ namespace VRSYS.Photoportals {
                 .OnComplete(() => this.UpdateComponentStatus($"Finished Scaling to 1.0"));
             }
 
-            if(this.rotationLock == false) {
+            if(this.rotationLock == true) {
                 Vector3 currentRotation = this.viewTransform.rotation.eulerAngles;
                 Vector3 constrainedRotation = new Vector3(0f, currentRotation.y, 0f);
                 this.viewTransform.rotation = Quaternion.Euler(constrainedRotation);
@@ -490,16 +490,9 @@ namespace VRSYS.Photoportals {
         #endregion
 
         #region Rotation Lock
-        public void EnableRotationLock() {
-            this.rotationLock = true;
+        public void SetRotationLock(bool value) {
+            this.rotationLock = value;
         }
-        public void DisableRotationLock() {
-            this.rotationLock = false;
-        }
-        public void ToggleRotationLock() {
-            this.rotationLock = !this.rotationLock;
-        }
-
         #endregion
 
         #region Joystick Steering

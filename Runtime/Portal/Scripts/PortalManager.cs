@@ -212,11 +212,9 @@ namespace VRSYS.Photoportals {
 
             Transform anchoringGO = display.transform.Find("Poke Interactions Canvas/Anchoring Toggle");
             toggleComponent = anchoringGO.GetComponentInChildren<Toggle>();
-            toggleComponent.onValueChanged.AddListener(
-                (value) => {
-                    Debug.Log("TODO: Toggle Anchoring");
-                }
-            );
+            toggleComponent.onValueChanged.AddListener((value) => portalControl.SetRotationLock(value));
+            toggleComponent.isOn = false;
+            portalControl.SetRotationLock(false);
 
             Debug.Log("Adding Listener to Scale Slider for portal scaling");
             Transform scaleGO = display.transform.Find("Poke Interactions Canvas/Scale Slider");
