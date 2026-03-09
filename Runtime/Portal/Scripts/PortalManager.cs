@@ -21,32 +21,16 @@ namespace VRSYS.Photoportals {
         public GameObject displayPrefab;
         public GameObject viewPrefab;
         public Material materialToInstantiate;
+        private int portalCount = 0;
 
         [Header("HMD Input Actions for Portal Creation")]
         public InputActionProperty buttonPressRight;
-
         public InputActionProperty buttonPressLeft;
-
         public InputActionProperty doubleTapRight;
-
         public InputActionProperty doubleTapLeft;
         
         [Header("Desktop Input Actions for Portal Creation")]
         public InputActionProperty desktopButtonPress;
-
-        [System.Serializable]
-        struct PortalRegistryEntry {
-            [SerializeField]
-            [Tooltip("The GameObject that resembles the display in the scenegraph")]
-            public GameObject display;
-
-            [SerializeField]
-            [Tooltip("The GameObject that resembles the view in the scenegraph")]
-            public GameObject view;
-        }
-        
-        [SerializeField]
-        private List<PortalRegistryEntry> registry;
         #endregion
 
         #region Debugging Utilities Members
@@ -102,25 +86,26 @@ namespace VRSYS.Photoportals {
         public void CreatePortalServerRpc(Vector3 position, Quaternion rotation) {
             ExtendedLogger.LogInfo(this.GetType().Name, "CreatePortal", this);
             
-            PortalRegistryEntry entry = new PortalRegistryEntry();
-            entry.display = Instantiate(this.displayPrefab);
-            entry.display.name = $"Portal #{this.registry.Count} Display";
-            entry.display.GetComponent<NetworkObject>().Spawn();
+            GameObject display = Instantiate(this.displayPrefab);
+            display.name = $"Portal #{this.portalCount} Display";
+            display.GetComponent<NetworkObject>().Spawn();
 
-            entry.view = Instantiate(this.viewPrefab);
-            entry.view.name = $"Portal #{this.registry.Count} View";
-            entry.view.GetComponent<NetworkObject>().Spawn();
+            GameObject view = Instantiate(this.viewPrefab);
+            view.name = $"Portal #{this.portalCount} View";
+            view.GetComponent<NetworkObject>().Spawn();
 
             this.SetupPortalRpc(
-                entry.display.GetComponent<NetworkObject>().NetworkObjectId,
-                entry.view.GetComponent<NetworkObject>().NetworkObjectId
+                display.GetComponent<NetworkObject>().NetworkObjectId,
+                view.GetComponent<NetworkObject>().NetworkObjectId
             );
 
-            entry.display.transform.position = entry.view.transform.position = position;
-            entry.display.transform.rotation = entry.view.transform.rotation = rotation;
-            entry.view.transform.Translate(Vector3.forward * 0.01f, Space.Self);
+            display.transform.position = view.transform.position = position;
+            display.transform.rotation = view.transform.rotation = rotation;
 
-            this.registry.Add(entry);
+            //creating some offset between both so the camera does not render the display
+            view.transform.Translate(Vector3.forward * 0.01f, Space.Self);
+
+            this.portalCount++;
         }
 
         [Rpc(SendTo.Everyone, RequireOwnership = false)]
@@ -129,6 +114,8 @@ namespace VRSYS.Photoportals {
             var viewNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[viewNetworkObjectId];
             GameObject display = displayNetworkObject.gameObject;
             GameObject view = viewNetworkObject.gameObject;
+            PortalControl portalControl = display.GetComponent<PortalControl>();
+            portalControl.viewTransform = view.transform;
 
             //setting up rendering stuff
             Material material = Material.Instantiate(this.materialToInstantiate);
@@ -156,9 +143,6 @@ namespace VRSYS.Photoportals {
             
 
             //setting up interaction stuff
-            PortalControl portalControl = display.GetComponent<PortalControl>();
-            portalControl.viewTransform = view.transform;
-
             var displayOwnershipManager = display.GetComponent<OwnershipManager>();
             var viewOwnershipManager = view.GetComponent<OwnershipManager>();
             var grabInteractable = display.GetComponent<XRGrabInteractable>();
