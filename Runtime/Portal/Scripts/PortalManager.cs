@@ -94,7 +94,7 @@ namespace VRSYS.Photoportals {
         
         #region Portal Creation Methods
         [ContextMenu("CreatePortal")]
-        private void CreatePortal() {
+        private void CreatePortalContextMenuCall() {
             this.CreatePortalServerRpc(Vector3.zero, Quaternion.identity);
         }
 
