@@ -16,6 +16,10 @@ public class WriteNodeNameIntoTMPText : MonoBehaviour {
 
     [ContextMenu("UpdateText")]
     void UpdateText() {
+        if(this.node == null) {
+            this.text.text = "";
+            return;
+        }
         this.text.text = this.node.name;
     }
 
