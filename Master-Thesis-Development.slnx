@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Project Path="vrsys.photoportals.csproj" />
+  <Project Path="Assembly-CSharp-firstpass.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="vrsys.photoportals.Editor.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+</Solution>
