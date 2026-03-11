@@ -148,12 +148,12 @@ namespace VRSYS.Photoportals {
             view.transform.Find("Cameras/RightCamera").GetComponent<Camera>().targetTexture = rightRenderTexture;
 
             //setting up head tracking
-            var tracking = display.GetComponent<PortalExitHeadTracking>();
-            tracking.portalEntranceScreen = quad;
-            tracking.portalExitScreen = view.transform.Find("StereoDisplayProxy");
-            tracking.portalExitHead = view.transform.Find("Cameras");
+            var tracking = display.GetComponent<PortalHeadTracking>();
+            tracking.portalDisplayScreen = quad;
+            tracking.portalViewScreen = view.transform.Find("StereoDisplayProxy");
+            tracking.portalViewHead = view.transform.Find("Cameras");
             tracking.viewRoot = view.transform;
-            tracking.portalEntranceHead = NetworkUser.LocalInstance.avatarAnatomy.head;
+            tracking.portalDisplayHead = NetworkUser.LocalInstance.avatarAnatomy.head;
             
             //setting up ownership transfer
             var displayOwnershipManager = display.GetComponent<OwnershipManager>();
