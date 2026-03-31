@@ -166,7 +166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1389733193041244091, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_DebugVisualizationsEnabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1485185037569802774, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_Layer
@@ -302,7 +302,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4886640192717576959, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_DebugVisualizationsEnabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5050536928580326715, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: 'localBehaviours.Array.data[9]'
@@ -498,7 +498,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7813255487657143805, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_DebugVisualizationsEnabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7813255487657143805, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_HoverExited.m_PersistentCalls.m_Calls.Array.size
@@ -782,7 +782,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8975446742627626162, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
       propertyPath: m_DebugVisualizationsEnabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 920141110983797090, guid: 384018c6f1411e544ba746cf9a608b9b, type: 3}
