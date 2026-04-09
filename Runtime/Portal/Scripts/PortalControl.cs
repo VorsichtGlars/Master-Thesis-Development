@@ -434,11 +434,15 @@ namespace VRSYS.Photoportals {
         #endregion
 
         #region Scaling
-        private void UpdateScaleUI() {
+        public void UpdateScaleUI() {
+            if(this.sliderElement == null)
+                this.sliderElement = this.transform.GetComponentInChildren<Slider>(includeInactive: true);
+
             if(this.sliderElement == null) {
                 ExtendedLogger.LogError(this.GetType().Name, "No slider element found in children.", this);
                 return;
             }
+
             float mappedScaleValue = this.viewTransform.lossyScale.x switch {
                 >= 500f  => 4f,
                 >= 100f and < 500f => 3f,
@@ -446,6 +450,10 @@ namespace VRSYS.Photoportals {
                 >= 10f and < 50f => 1f,
                 _ => 0f
             };
+
+            if(this.sliderElement.value == mappedScaleValue)
+                return;
+
             this.sliderElement.SetValueWithoutNotify(mappedScaleValue);
         }
         #endregion
