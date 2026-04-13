@@ -55,10 +55,10 @@ namespace VRSYS.Photoportals {
         [SerializeField] private bool allowJoystickBasedSteering = true;
         [SerializeField] private bool allowWorldGrab = true;
 
-        private bool AllowUnimanualSteering { get => this.allowUnimanualSteering; set => this.allowUnimanualSteering = value; }
-        private bool AllowBimanualControllerBasedSteering { get => this.allowBimanualControllerBasedSteering; set => this.allowBimanualControllerBasedSteering = value; }
-        private bool AllowJoystickBasedSteering { get => this.allowJoystickBasedSteering; set => this.allowJoystickBasedSteering = value; }
-        private bool AllowWorldGrab { get => this.allowWorldGrab; set => this.allowWorldGrab = value; }
+        public bool AllowUnimanualSteering { get => this.allowUnimanualSteering; set => this.allowUnimanualSteering = value; }
+        public bool AllowBimanualControllerBasedSteering { get => this.allowBimanualControllerBasedSteering; set => this.allowBimanualControllerBasedSteering = value; }
+        public bool AllowJoystickBasedSteering { get => this.allowJoystickBasedSteering; set => this.allowJoystickBasedSteering = value; }
+        public bool AllowWorldGrab { get => this.allowWorldGrab; set => this.allowWorldGrab = value; }
         #endregion
 
         #region grabbing members
