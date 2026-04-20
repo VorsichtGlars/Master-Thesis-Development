@@ -55,6 +55,7 @@ namespace VRSYS.Photoportals {
         [SerializeField] private bool allowJoystickBasedSteering = true;
         [SerializeField] private bool allowWorldGrab = true;
         [SerializeField] private bool allowControllerJoystickScaling = true;
+        [SerializeField] private bool allowUnimanualLinkingOverFrameGrabbing = true;
 
         public bool AllowUnimanualSteering { get => this.allowUnimanualSteering; set => this.allowUnimanualSteering = value; }
         public bool AllowBimanualControllerBasedSteering { get => this.allowBimanualControllerBasedSteering; set => this.allowBimanualControllerBasedSteering = value; }
@@ -325,29 +326,30 @@ namespace VRSYS.Photoportals {
             leftTriggerValue = (float)Math.Round(leftTriggerValue, 2);
             rightTriggerValue = (float)Math.Round(rightTriggerValue, 2);
 
-            //TODO check wether clutching/portal grab is allowed/disallowed
-            if (this.worldGrabIsActive == false && this.portalGrabIsActive == false && leftTriggerValue > 0.1f && this.isSelectedWithLeftHand) {
-                this.UpdateComponentStatus("Starting portal grab with left hand");
-                this.portalGrabIsActive = true;
-                this.StartPortalGrab();
-            }
+            if(this.AllowUnimanualLinkingOverFrameGrabbing == true) {
+                if (this.worldGrabIsActive == false && this.portalGrabIsActive == false && leftTriggerValue > 0.1f && this.isSelectedWithLeftHand) {
+                    this.UpdateComponentStatus("Starting portal grab with left hand");
+                    this.portalGrabIsActive = true;
+                    this.StartPortalGrab();
+                }
 
-            if (this.portalGrabIsActive == true && leftTriggerValue < 0.1f && this.isSelectedWithLeftHand && this.collisionAtScreenCenter == false) {
-                this.UpdateComponentStatus("Stopping portal grab with left hand");
-                this.portalGrabIsActive = false;
-                this.StopPortalGrab();
-            }
+                if (this.portalGrabIsActive == true && leftTriggerValue < 0.1f && this.isSelectedWithLeftHand && this.collisionAtScreenCenter == false) {
+                    this.UpdateComponentStatus("Stopping portal grab with left hand");
+                    this.portalGrabIsActive = false;
+                    this.StopPortalGrab();
+                }
 
-            if (this.worldGrabIsActive == false && this.portalGrabIsActive == false && rightTriggerValue > 0.1f && this.isSelectedWithRightHand) {
-                this.UpdateComponentStatus("Starting portal grab with right hand");
-                this.portalGrabIsActive = true;
-                this.StartPortalGrab();
-            }
+                if (this.worldGrabIsActive == false && this.portalGrabIsActive == false && rightTriggerValue > 0.1f && this.isSelectedWithRightHand) {
+                    this.UpdateComponentStatus("Starting portal grab with right hand");
+                    this.portalGrabIsActive = true;
+                    this.StartPortalGrab();
+                }
 
-            if (this.portalGrabIsActive == true && rightTriggerValue < 0.1f && this.isSelectedWithRightHand && this.collisionAtScreenCenter == false) {
-                this.UpdateComponentStatus("Stopping portal grab with right hand");
-                this.portalGrabIsActive = false;
-                this.StopPortalGrab();
+                if (this.portalGrabIsActive == true && rightTriggerValue < 0.1f && this.isSelectedWithRightHand && this.collisionAtScreenCenter == false) {
+                    this.UpdateComponentStatus("Stopping portal grab with right hand");
+                    this.portalGrabIsActive = false;
+                    this.StopPortalGrab();
+                }
             }
 
             //unimanual action
