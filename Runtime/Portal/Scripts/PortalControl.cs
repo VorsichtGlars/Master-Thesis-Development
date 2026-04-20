@@ -54,6 +54,7 @@ namespace VRSYS.Photoportals {
         [SerializeField] private bool allowBimanualControllerBasedSteering = true;
         [SerializeField] private bool allowJoystickBasedSteering = true;
         [SerializeField] private bool allowWorldGrab = true;
+        [SerializeField] private bool allowControllerJoystickScaling = true;
 
         public bool AllowUnimanualSteering { get => this.allowUnimanualSteering; set => this.allowUnimanualSteering = value; }
         public bool AllowBimanualControllerBasedSteering { get => this.allowBimanualControllerBasedSteering; set => this.allowBimanualControllerBasedSteering = value; }
@@ -428,27 +429,29 @@ namespace VRSYS.Photoportals {
                 }
             }
 
-            //scaling options via controller (both inputs are allowed simultaneously)
-            if (this.isSelected && this.scaleInput.action?.WasPerformedThisFrame() == true) {
-                this.UpdateComponentStatus("Scaling portal view with controller input");
-                var scalingValue = this.scaleTransferFunction.Evaluate(this.scaleInput.action.ReadValue<Vector2>().y);
-                scalingValue *= Time.deltaTime;
+            if(this.AllowControllerJoystickScaling == true) {
+                //scaling options via controller (both inputs are allowed simultaneously)
+                if (this.isSelected && this.scaleInput.action?.WasPerformedThisFrame() == true) {
+                    this.UpdateComponentStatus("Scaling portal view with controller input");
+                    var scalingValue = this.scaleTransferFunction.Evaluate(this.scaleInput.action.ReadValue<Vector2>().y);
+                    scalingValue *= Time.deltaTime;
 
-                if ((this.viewTransform.localScale.x + scalingValue) < 1.0f) {
-                    this.viewTransform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    if ((this.viewTransform.localScale.x + scalingValue) < 1.0f) {
+                        this.viewTransform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    }
+                    else {
+                        this.viewTransform.localScale += new Vector3(scalingValue, scalingValue, scalingValue);
+                    }
+                    this.UpdateScaleUI();
                 }
-                else {
-                    this.viewTransform.localScale += new Vector3(scalingValue, scalingValue, scalingValue);
-                }
-                this.UpdateScaleUI();
-            }
 
-            if (this.isSelected && this.scaleResetInput.action?.WasPerformedThisFrame() == true) {
-                this.UpdateComponentStatus("Resetting portal view scale with controller input");
-                this.viewTransform.DOScale(1.0f, 2.0f)
-                .OnStart(() => this.UpdateComponentStatus($"Scaling to 1.0"))
-                .OnUpdate(() => this.UpdateScaleUI())
-                .OnComplete(() => this.UpdateComponentStatus($"Finished Scaling to 1.0"));
+                if (this.isSelected && this.scaleResetInput.action?.WasPerformedThisFrame() == true) {
+                    this.UpdateComponentStatus("Resetting portal view scale with controller input");
+                    this.viewTransform.DOScale(1.0f, 2.0f)
+                    .OnStart(() => this.UpdateComponentStatus($"Scaling to 1.0"))
+                    .OnUpdate(() => this.UpdateScaleUI())
+                    .OnComplete(() => this.UpdateComponentStatus($"Finished Scaling to 1.0"));
+                }
             }
 
             if(this.rotationLock == true) {
