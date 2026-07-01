@@ -939,6 +939,15 @@ MonoBehaviour:
   allowControllerJoystickScaling: 1
   allowUnimanualLinkingOverFrameGrabbing: 1
   joystickAsChild: 1
+  portalLayerToggles:
+  - toggle: {fileID: 5065184373633081508}
+    layerName: HousingData
+  - toggle: {fileID: 4103774499775800940}
+    layerName: ShoppingData
+  - toggle: {fileID: 2155849756955867246}
+    layerName: BusData
+  - toggle: {fileID: 6784389605184950289}
+    layerName: GreeneryData
   speedTransferFunction:
     serializedVersion: 2
     m_Curve:
@@ -2085,7 +2094,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3673707400186278618, guid: a56c982030281f34c8aac44b92d1463a, type: 3}
       propertyPath: m_IsOn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3673707400186278618, guid: a56c982030281f34c8aac44b92d1463a, type: 3}
       propertyPath: graphic
@@ -3074,7 +3083,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3673707400186278618, guid: a56c982030281f34c8aac44b92d1463a, type: 3}
       propertyPath: m_IsOn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3673707400186278618, guid: a56c982030281f34c8aac44b92d1463a, type: 3}
       propertyPath: graphic
@@ -5200,7 +5209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3673707400186278618, guid: a56c982030281f34c8aac44b92d1463a, type: 3}
       propertyPath: m_IsOn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3673707400186278618, guid: a56c982030281f34c8aac44b92d1463a, type: 3}
       propertyPath: graphic
@@ -5509,7 +5518,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3673707400186278618, guid: a56c982030281f34c8aac44b92d1463a, type: 3}
       propertyPath: m_IsOn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3673707400186278618, guid: a56c982030281f34c8aac44b92d1463a, type: 3}
       propertyPath: graphic

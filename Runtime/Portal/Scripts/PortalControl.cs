@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,6 +67,23 @@ namespace VRSYS.Photoportals {
         public bool AllowControllerJoystickScaling { get => this.allowControllerJoystickScaling; set => this.allowControllerJoystickScaling = value; }
         public bool AllowUnimanualLinkingOverFrameGrabbing { get => this.allowUnimanualLinkingOverFrameGrabbing; set => this.allowUnimanualLinkingOverFrameGrabbing = value; }
         public bool JoystickAsChild { get => this.joystickAsChild; set => this.joystickAsChild = value; }
+        #endregion
+
+        #region Layer Visibility Configuration
+        [Serializable]
+        public class PortalLayerToggle {
+            [Tooltip("UI toggle that controls whether the layer below is rendered inside this portal's view.")]
+            public Toggle toggle;
+            [Tooltip("Name of the layer to show/hide in the portal view. This layer is excluded from the main avatar cameras, so its objects are only ever visible through portals.")]
+            public string layerName;
+        }
+
+        [SerializeField]
+        [Tooltip("Layers that are only rendered inside portal views. Each toggle adds/removes its layer from this portal's view cameras. These layers are excluded from the local avatar cameras so their objects are only visible through portals. Add a NetworkedToggle to each toggle GameObject to sync its state across clients.")]
+        private List<PortalLayerToggle> portalLayerToggles = new List<PortalLayerToggle>();
+
+        private Camera leftCamera;
+        private Camera rightCamera;
         #endregion
 
         #region grabbing members
@@ -287,15 +305,15 @@ namespace VRSYS.Photoportals {
             var renderer = quad.GetComponent<MeshRenderer>();
             renderer.SetPropertyBlock(block);
 
-            var leftCamera = this.viewTransform.transform.Find("Cameras/LeftCamera").GetComponent<Camera>();
-            leftCamera.targetTexture = leftRenderTexture;
-            leftCamera.cullingMask |= LayerMask.GetMask("CameraIgnore");
-            var rightCamera = this.viewTransform.transform.Find("Cameras/RightCamera").GetComponent<Camera>();
-            rightCamera.targetTexture = rightRenderTexture;
-            rightCamera.cullingMask |= LayerMask.GetMask("CameraIgnore");
+            this.leftCamera = this.viewTransform.transform.Find("Cameras/LeftCamera").GetComponent<Camera>();
+            this.leftCamera.targetTexture = leftRenderTexture;
+            this.leftCamera.cullingMask |= LayerMask.GetMask("CameraIgnore");
+            this.rightCamera = this.viewTransform.transform.Find("Cameras/RightCamera").GetComponent<Camera>();
+            this.rightCamera.targetTexture = rightRenderTexture;
+            this.rightCamera.cullingMask |= LayerMask.GetMask("CameraIgnore");
 
-            leftCamera.enabled = true;
-            rightCamera.enabled = true;
+            this.leftCamera.enabled = true;
+            this.rightCamera.enabled = true;
 
             //setting up head tracking
             var tracking = this.GetComponent<PortalHeadTracking>();
@@ -317,7 +335,8 @@ namespace VRSYS.Photoportals {
             //grabInteractable.lastSelectExited.AddListener(displayOwnershipManager.ReturnOwnershipToServer);
             //grabInteractable.lastSelectExited.AddListener(viewOwnershipManager.ReturnOwnershipToServer);
 
-
+            //setting up per-layer visibility toggles for the portal view
+            this.SetupLayerToggles();
         }
 
         void Update() {
@@ -624,6 +643,60 @@ namespace VRSYS.Photoportals {
             var offAxisProjections = this.viewTransform.gameObject.GetComponentsInChildren<OffAxisProjection>();
             foreach (var oap in offAxisProjections) {
                 oap.SetNearClipPlane(value);
+            }
+        }
+        #endregion
+
+        #region Layer Visibility
+        // Wires each configured toggle to add/remove its layer on this portal's view
+        // cameras, and excludes those layers from the local avatar cameras so their
+        // objects are only ever visible through portals. Runs per-client from LinkToView,
+        // so each client applies the mask to its own local camera instances.
+        private void SetupLayerToggles() {
+            foreach (var entry in this.portalLayerToggles) {
+                if (entry.toggle == null) {
+                    ExtendedLogger.LogError(this.GetType().Name, $"Layer toggle for '{entry.layerName}' has no Toggle assigned.", this);
+                    continue;
+                }
+
+                int layer = LayerMask.NameToLayer(entry.layerName);
+                if (layer == -1) {
+                    ExtendedLogger.LogError(this.GetType().Name, $"Layer '{entry.layerName}' does not exist. Add it in the Tags and Layers settings.", this);
+                    continue;
+                }
+
+                this.ExcludeLayerFromAvatarCameras(layer);
+
+                // apply the current (possibly network-synced) state, then react to changes
+                this.SetPortalLayerVisible(layer, entry.toggle.isOn);
+                entry.toggle.onValueChanged.AddListener(isOn => this.SetPortalLayerVisible(layer, isOn));
+            }
+        }
+
+        private void SetPortalLayerVisible(int layer, bool visible) {
+            if (this.leftCamera == null || this.rightCamera == null) {
+                ExtendedLogger.LogError(this.GetType().Name, "Portal view cameras not linked; cannot set layer visibility.", this);
+                return;
+            }
+
+            int mask = 1 << layer;
+            if (visible) {
+                this.leftCamera.cullingMask |= mask;
+                this.rightCamera.cullingMask |= mask;
+            } else {
+                this.leftCamera.cullingMask &= ~mask;
+                this.rightCamera.cullingMask &= ~mask;
+            }
+        }
+
+        private void ExcludeLayerFromAvatarCameras(int layer) {
+            if (NetworkUser.LocalInstance == null)
+                return;
+
+            int mask = 1 << layer;
+            var cameras = NetworkUser.LocalInstance.avatarAnatomy.gameObject.GetComponentsInChildren<Camera>();
+            foreach (var camera in cameras) {
+                camera.cullingMask &= ~mask;
             }
         }
         #endregion
