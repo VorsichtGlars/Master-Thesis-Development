@@ -284,6 +284,10 @@ namespace VRSYS.Photoportals {
                 };
                 this.viewTransform.DOScale(targetScale, 1f);
             });
+
+            Transform layerGO = this.transform.Find("Poke Interactions Canvas/Layer Toggle");
+            Toggle toggleLayerComponent = layerGO.GetComponentInChildren<Toggle>();
+            toggleLayerComponent.isOn = false;
         }
 
         public void LinkToView()
